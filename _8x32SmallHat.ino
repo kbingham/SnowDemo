@@ -1,7 +1,13 @@
+
+/*
+ * ESP8266 has too much flicker with Interrupts enabled
+ */
 #define FASTLED_INTERRUPT_RETRY_COUNT 1
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include <FastLED.h>
+
+// https://github.com/AaronLiddiment/LEDMatrix
 #include <LEDMatrix.h>
 
 // Change the next 6 defines to match your matrix type and size
