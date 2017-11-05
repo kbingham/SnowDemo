@@ -86,21 +86,31 @@ void AddSnow()
   }
 }
 
-void DrawPresent(cLEDMatrixBase & matrix, int x, int y, int w, int h, CRGB color)
+void DrawPresent(cLEDMatrixBase & matrix, int x, int y, int w, int h, CRGB wrap, CRGB ribbon)
 {
-  matrix.DrawFilledRectangle(x, y, x+w-1, y+h-1, color);
+  matrix.DrawFilledRectangle(x, y, x+w-1, y+h-1, wrap);
 
   if (w & 1) {
     int m = x + (w/2);
-    matrix.DrawLine(m, y, m, y+h-1, CRGB::Red);
+    matrix.DrawLine(m, y, m, y+h-1, ribbon);
+    matrix.DrawLine(m, y+h, m-1, y+h+1, ribbon);
+    matrix.DrawLine(m, y+h, m+1, y+h+1, ribbon);
   }
+}
+
+void DrawMovingPresent(cLEDMatrixBase &matrix, int bpm, int w, int h, CRGB wrap, CRGB ribbon)
+{
+  DrawPresent(leds, beatsin8(bpm, 0, MATRIX_WIDTH - w), 0, w, h, wrap, ribbon);
 }
 
 void loop()
 {
   ClearMatrix(leds);
 
-  DrawPresent(leds, 10, 0, 5, 4, CRGB::Blue);
+  DrawMovingPresent(leds, 6, 7, 5, CRGB::Purple, CRGB::Yellow);
+  DrawMovingPresent(leds, 4, 5, 4, CRGB::Blue,   CRGB::Red);
+  DrawMovingPresent(leds, 2, 3, 2, CRGB::Green,  CRGB::Blue);
+
   AddSnow();
 
   FastLED.show();
