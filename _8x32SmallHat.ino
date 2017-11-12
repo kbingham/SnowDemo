@@ -111,8 +111,8 @@ struct Present {
 
 struct Present presents[] = {
   { 3, 3, CRGB::Purple, CRGB::Yellow, 9, 0, 0},
-  { 5, 3, CRGB::Blue,   CRGB::Red,    7, MATRIX_WIDTH/2, 0},
-  { 3, 2, CRGB::Green,  CRGB::Blue,   5, MATRIX_WIDTH-3, 0},
+  { 5, 3, CRGB::Blue,   CRGB::Red,    7, 0, 0},
+  { 3, 2, CRGB::Green,  CRGB::Blue,   5, 0, 0},
 };
 
 void DrawPresent(cLEDMatrixBase & matrix, struct Present *p)
