@@ -137,12 +137,38 @@ void DrawMovingPresent(cLEDMatrixBase &matrix, int l, int r, struct Present *p)
   DrawPresent(leds, p);
 }
 
+void DrawXmasTree(cLEDMatrixBase &matrix, int m)
+{
+  int hue = 0;
+
+  /* Base */
+  matrix.DrawFilledRectangle(m-1, 0, m+1, 2, CRGB::SaddleBrown);
+
+  /* Draw the Tree */
+  matrix.DrawFilledRectangle(m-3, 2, m+3, 2, CRGB::Green);
+  matrix.DrawFilledRectangle(m-2, 3, m+2, 4, CRGB::Green);
+  matrix.DrawFilledRectangle(m-1, 5, m+1, 6, CRGB::Green);
+
+  /* With a star on top, of course */
+  matrix(m, 7) = CRGB::Yellow;
+
+  /* Add the sparkle */
+  matrix(m-2, 2) = CHSV( hue + random8(64), 200, 255);
+  matrix(m+3, 2) = CHSV( hue + random8(64), 200, 255);
+  matrix(m,   3) = CHSV( hue + random8(64), 200, 255);
+  matrix(m-2, 4) = CHSV( hue + random8(64), 200, 255);
+  matrix(m+1, 5) = CHSV( hue + random8(64), 200, 255);
+  matrix(m-1, 6) = CHSV( hue + random8(64), 200, 255);
+}
+
 void loop()
 {
   ClearMatrix(leds);
 
   DrawMovingPresent(leds, 0,  13, &presents[0]);
   DrawMovingPresent(leds, 20, 32, &presents[1]);
+
+  DrawXmasTree(leds, 16);
 
   AddSnow();
 
