@@ -165,10 +165,12 @@ void loop()
 {
   ClearMatrix(leds);
 
-  DrawMovingPresent(leds, 0,  13, &presents[0]);
-  DrawMovingPresent(leds, 20, 32, &presents[1]);
+  DrawMovingPresent(leds, 7,  16, &presents[0]);
+  DrawMovingPresent(leds, 23, 32, &presents[1]);
 
-  DrawXmasTree(leds, 16);
+  /* Tree's are 7 pixels wide */
+  DrawXmasTree(leds, 3);
+  DrawXmasTree(leds, 3 + 16);
 
   AddSnow();
 
