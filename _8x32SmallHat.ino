@@ -92,30 +92,57 @@ void AddSnow()
   }
 }
 
-void DrawPresent(cLEDMatrixBase & matrix, int x, int y, int w, int h, CRGB wrap, CRGB ribbon)
-{
-  matrix.DrawFilledRectangle(x, y, x+w-1, y+h-1, wrap);
+struct Present {
+  /* Size */
+  int width;
+  int height;
 
-  if (w & 1) {
-    int m = x + (w/2);
-    matrix.DrawLine(m, y, m, y+h-1, ribbon);
-    matrix.DrawLine(m, y+h, m-1, y+h+1, ribbon);
-    matrix.DrawLine(m, y+h, m+1, y+h+1, ribbon);
+  /* Style */
+  CRGB wrap;
+  CRGB ribbon;
+
+  /* Speed */
+  int bpm;
+
+  /* Position */
+  int x;
+  int y;
+};
+
+struct Present presents[] = {
+  { 3, 3, CRGB::Purple, CRGB::Yellow, 9, 0, 0},
+  { 5, 3, CRGB::Blue,   CRGB::Red,    7, MATRIX_WIDTH/2, 0},
+  { 3, 2, CRGB::Green,  CRGB::Blue,   5, MATRIX_WIDTH-3, 0},
+};
+
+void DrawPresent(cLEDMatrixBase & matrix, struct Present *p)
+{
+  matrix.DrawFilledRectangle(p->x, p->y, p->x + p->width-1, p->y + p->height-1, p->wrap);
+
+  if (p->width & 1) {
+    int m = p->x + (p->width/2); /* Middle */
+    int top = p->y + p->height;
+
+    matrix.DrawLine(m, p->y,  m, top-1, p->ribbon); /* Vertical line */
+    matrix.DrawLine(m, top, m-1, top+1, p->ribbon); /* Left Bow */
+    matrix.DrawLine(m, top, m+1, top+1, p->ribbon); /* Right Bow */
   }
 }
 
-void DrawMovingPresent(cLEDMatrixBase &matrix, int bpm, int w, int h, CRGB wrap, CRGB ribbon)
+void DrawMovingPresent(cLEDMatrixBase &matrix, int l, int r, struct Present *p)
 {
-  DrawPresent(leds, beatsin8(bpm, 0, MATRIX_WIDTH - w), 0, w, h, wrap, ribbon);
+  p->x = beatsin8(p->bpm, l, r - p->width);
+  p->y = 0;
+
+  DrawPresent(leds, p);
 }
 
 void loop()
 {
   ClearMatrix(leds);
 
-  DrawMovingPresent(leds, 6, 7, 5, CRGB::Purple, CRGB::Yellow);
-  DrawMovingPresent(leds, 4, 5, 4, CRGB::Blue,   CRGB::Red);
-  DrawMovingPresent(leds, 2, 3, 2, CRGB::Green,  CRGB::Blue);
+  DrawMovingPresent(leds, 0,  13, &presents[0]);
+  DrawMovingPresent(leds, 20, 32, &presents[1]);
 
   AddSnow();
 
